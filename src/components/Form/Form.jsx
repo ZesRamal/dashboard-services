@@ -1,11 +1,7 @@
 import style from "./form.module.css"
 import { useState } from "react";
-import { db } from "../../services/firebase/firebase"
-import { setDoc, collection, doc, Timestamp } from "firebase/firestore";
 
 const Form = () => {
-    const docRef = doc(collection(db, 'users'));
-
     const [profile, setProfile] = useState({
         name: '',
         email: '',
@@ -14,18 +10,6 @@ const Form = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        if (profile.name && profile.email) {
-            await setDoc(docRef, { ...profile, registerTime: Timestamp.now() });
-            document.getElementById("register").reset();
-            setProfile({
-                name: '',
-                email: '',
-                notes: '',
-                registerTime: ''
-            })
-        } else {
-            window.alert("Please fill the name and email fields!")
-        }
     }
 
 

@@ -1,23 +1,11 @@
 import style from "./table.module.css"
-import { db } from "../../services/firebase/firebase"
-import { collection, getDocs } from "firebase/firestore";
 import { useState, useEffect } from "react";
 
 const Table = () => {
     const [users, setUsers] = useState([]);
     useEffect(() => {
         const fetchUsers = async () => {
-            try {
-                const collectionRef = collection(db, 'users');
-                const collectionSnapshot = await getDocs(collectionRef);
-                const fetchedUsers = collectionSnapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data(),
-                })).sort((userA, userB) => userB.registerTime.seconds - userA.registerTime.seconds);
-                setUsers(fetchedUsers);
-            } catch (error) {
-                console.error("Error fetching users:", error);
-            }
+            setUsers([])
         };
 
         fetchUsers();
