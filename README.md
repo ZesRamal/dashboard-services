@@ -1,8 +1,18 @@
-# React + Vite
+# Dashboard Template
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este proyecto consiste en un mismo dashboard básico al que se le implementa autenticación, protección de rutas y grabado de datos en una base de datos.
 
-Currently, two official plugins are available:
+Cada rama proporciona las mismas funciones utilizando un servicio en la nube diferente.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Servicios disponibles:
+
+- Amazon RDS
+- Google Cloud SQL
+- Azure SQL Database
+- MongoDB Atlas
+- Amazon DynamoDB
+- Google Cloud Firestore
+- Azure Cosmos DB
+- Cockroach DB
+- Redis Enterprise Cloud
+- Fauna DB
