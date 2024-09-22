@@ -1,5 +1,6 @@
 import style from "./form.module.css"
 import { useState } from "react";
+import axios from "axios";
 
 const Form = () => {
     const [profile, setProfile] = useState({
@@ -10,8 +11,37 @@ const Form = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        if (profile.name && profile.email) {
+            await registerUser(profile.name, profile.email, profile.notes)
+            document.getElementById("register").reset();
+            setProfile({
+                name: '',
+                email: '',
+                notes: '',
+            })
+        } else {
+            window.alert("Please fill the name and email fields!")
+        }
+
+
     }
 
+    async function registerUser(name, email, notes) {
+        try {
+            const response = await axios.post("http://localhost:3000/registerProfile", {
+                name: name,
+                email: email,
+                notes: notes,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+            console.log(response.data);
+        } catch (error) {
+            console.error('Registration error:', error);
+        }
+    }
 
     return (
         <div style={{ width: "100%", paddingTop: "5%" }}>
