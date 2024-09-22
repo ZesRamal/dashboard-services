@@ -1,15 +1,12 @@
-import { createClient } from 'redis';
-
-export default async function startConnection(){
-    const client = createClient({
-        password: import.meta.env.VITE_REDIS_PASSWORD,
-        socket: {
-            host: 'redis-13347.c60.us-west-1-2.ec2.redns.redis-cloud.com',
-            port: 13347
-        }
-    });
-    
-    client.on('error', (err) => console.log('Redis Client Error', err));
-    
-    await client.connect();
+const express = require('express')
+const app = express()
+const port = 3000
+const cors = require('cors')
+const corsOptions = {
+    origin: "http://localhost:5173"
 }
+
+app.use(cors(corsOptions));
+
+app.get('/', (req, res) => res.send('Hello World!'))
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))
