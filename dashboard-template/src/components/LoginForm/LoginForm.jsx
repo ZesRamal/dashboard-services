@@ -1,6 +1,12 @@
-import style from "./loginForm.module.css"
+import style from "./loginForm.module.css";
+// import { useState } from "react";
 
 const LoginForm = () => {
+    // const [loginData, setLoginData] = useState({
+    //     username: '',
+    //     password: '',
+    // });
+
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -10,8 +16,8 @@ const LoginForm = () => {
             <div className={style.box}>
                 <div className={style.title}>Login</div>
                 <form className={style.form} onSubmit={handleSubmit} id="register">
-                    <label htmlFor="name">Username</label>
-                    <input className={style.input} type="text" id="name" autoComplete="off" placeholder="Admin"
+                    <label htmlFor="username">Username</label>
+                    <input className={style.input} type="text" id="username" autoComplete="off" placeholder="Admin"
                         onChange={e => handleSubmit(e)} />
                     <label htmlFor="password">Password</label>
                     <input className={style.input} type="password" id="password" autoComplete="off" placeholder="Secret"
