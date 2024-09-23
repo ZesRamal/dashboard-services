@@ -5,12 +5,16 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const app = express()
-const port = 3000
+const app = express() // Crea la instancia de Express
+const port = 3000 // Establece el puerto de escucha
+
+// Configuración para permitir la escucha de la dirección
 const corsOptions = {
     origin: "http://localhost:5173"
-}
-const client = createClient({
+} 
+
+// Datos del cliente para conexión a RedisDB
+export const client = createClient({
     password: process.env.REDIS_PASSWORD,
     socket: {
         host: process.env.REDIS_HOST,
@@ -18,24 +22,39 @@ const client = createClient({
     }
 });
 
+// Inicia la conexión a la BD
 client.on('error', err => console.log('Redis Client Error', err));
 await client.connect();
 
-// Crea usuario de ejemplo en la base de datos
+// Crea el admin en caso de no existir
 if (await client.exists("users:admin") == false) {
   await client.set("users:admin", "secret");
 }
 
-app.use(cors(corsOptions));
-app.use(express.json())
+app.use(cors(corsOptions)); // Habilita el middleware CORS 
+app.use(express.json()) // Habilita la obtención de JSONs
+
+// Inicia el servidor Express
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
+// Función de ayuda para asegurar la conexión a Redis
 async function connect() {
     if (!client.isReady) {
         await client.connect();
     }
 } 
 
+// Función para generar una ID
+export function generateID() {
+    const date = new Date();
+    const seed = date.getTime();
+    Math.random.seed = seed;
+    const randomNumber = Math.random();
+    const scaledRandomNumber = Math.round(randomNumber * 100000000);
+    return scaledRandomNumber;
+}
+
+// Función post para registrar una nueva persona en la base de datos
 app.post('/registerProfile',authenticateToken, async (req, res) => {
     try {
         await connect();
@@ -45,8 +64,10 @@ app.post('/registerProfile',authenticateToken, async (req, res) => {
           email,
           notes,
         };
+
         let id = generateID();
-        do {
+        
+        do {// Do para asegurar que la ID no se repita
             id = generateID();
             try {
               const exists = await client.exists("profiles:" + id);
@@ -57,8 +78,11 @@ app.post('/registerProfile',authenticateToken, async (req, res) => {
               console.error('Error checking ID existence:', err);
             }
           } while (true);
+        
+        // Se crea la llave con el valor de los datos de la persona
         await client.json.set("profiles:" + id, "$", profileData);
         res.json({ message: 'Registration successful!' });
+
       } catch (error) {
         console.error('Registration error:', error);
         res.status(500).json({ message: 'Internal Server Error'   
@@ -66,6 +90,7 @@ app.post('/registerProfile',authenticateToken, async (req, res) => {
     }
 });
 
+// Función post para revisar inicio de sesión y generar token de sesión
 app.post('/checkLogin', async (req, res) => {
   try {
       await connect();
@@ -87,6 +112,7 @@ app.post('/checkLogin', async (req, res) => {
   }
 });
 
+// Función que verifica la autenticación del token de la sesión
 function authenticateToken(req, res, next) {
   const token = req.headers['authorization']?.split(' ')[1];
   if (!token) return res.sendStatus(401);
@@ -98,15 +124,7 @@ function authenticateToken(req, res, next) {
   });
 }
 
-function generateID() {
-  const date = new Date();
-  const seed = date.getTime();
-  Math.random.seed = seed;
-  const randomNumber = Math.random();
-  const scaledRandomNumber = Math.round(randomNumber * 100000000);
-  return scaledRandomNumber;
-}
-
+// Función que extrae las llaves y valores dentro del folder de perfiles
 app.get('/obtainProfiles', authenticateToken, async (req, res) => {
   await connect()
   const keys = await client.keys('profiles:*');
