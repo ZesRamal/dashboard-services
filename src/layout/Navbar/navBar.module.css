@@ -44,3 +44,20 @@
     background-color: rgb(17 24 39);
     border-radius: 2% 0 0 2%;
 }
+
+.navLiLogout{
+    color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: auto;
+    padding-left: 0.5rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+}
+
+.navLiLogout:hover{
+    background-color: rgb(75 85 99);
+    cursor: pointer;
+    border-radius: 2% 0 0 2%;
+}

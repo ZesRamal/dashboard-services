@@ -8,7 +8,7 @@ const Table = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const collectionRef = collection(db, 'users');
+                const collectionRef = collection(db, 'profiles');
                 const collectionSnapshot = await getDocs(collectionRef);
                 const fetchedUsers = collectionSnapshot.docs.map((doc) => ({
                     id: doc.id,

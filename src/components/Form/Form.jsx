@@ -4,7 +4,7 @@ import { db } from "../../services/firebase/firebase"
 import { setDoc, collection, doc, Timestamp } from "firebase/firestore";
 
 const Form = () => {
-    const docRef = doc(collection(db, 'users'));
+    const docRef = doc(collection(db, 'profiles'));
 
     const [profile, setProfile] = useState({
         name: '',
